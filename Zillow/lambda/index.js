@@ -20,7 +20,10 @@ exports.handler = (event, context, callback) => {
 
   fetch(`${taskURL}?fullpage=true`, { headers }).then(res => res.text()).then((html) => {
     const result = processHTML(html, id);
-    if (result.baths === 0 && result.beds === 0) {
+    const baths = result.baths === undefined ? 0 : result.baths;
+    const beds = result.beds === undefined ? 0 : result.beds;
+    const price = result.price === undefined ? 0 : result.price;
+    if (baths === 0 && beds === 0 && price !== 0) {
       console.log(`No baths & beds for [${id}]`);
       callback(`No baths & beds for [${id}]: ${JSON.stringify(result)}`);
       return;
