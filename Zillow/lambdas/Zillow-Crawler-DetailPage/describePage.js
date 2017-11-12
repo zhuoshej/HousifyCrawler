@@ -54,7 +54,7 @@ exports.processHTML = (html, { id, latitude, longitude }) => {
     const key = 'lastupdatedate';
     const value = moment().format('MM/DD/YY');
     result = processData(result, { key, value });
-    result.ttl = Math.floor(new Date().getTime() / 1000) + 60;
+    result.ttl = Math.floor(new Date().getTime() / 1000) + (60 * 60 * 24 * 7);
   }
   if (result.type === 'Condo') {
     const key = 'stories';

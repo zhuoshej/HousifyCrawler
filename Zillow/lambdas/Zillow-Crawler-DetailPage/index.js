@@ -3,13 +3,15 @@ console.log('Loading function');
 const fetch = require('node-fetch');
 const randomUserAgent = require('./randomUserAgent');
 const { processHTML } = require('./describePage');
+const QueueUrl = require('./aws-config.json').sqsHousingURL;
 const AWS = require('aws-sdk');
 
 const PreSoldTableName = 'Houses';
 const PostSoldTableName = 'PostSoldHousingTable';
 
 AWS.config.loadFromPath('./aws-config.json');
-const ddb = new AWS.DynamoDB.DocumentClient({ region: 'us-west-2' });
+const ddb = new AWS.DynamoDB.DocumentClient();
+const sqs = new AWS.SQS();
 
 exports.handler = (event, context, callback) => {
   const { taskURL, longitude, latitude } = JSON.parse(event.Records[0].Sns.Message);
@@ -30,25 +32,38 @@ exports.handler = (event, context, callback) => {
       return;
     }
     console.log(result);
-    const params = {
-      Item: result
-    };
+
 
     if (result.zillowdays === undefined && result.saves === undefined) {
-      params.TableName = PostSoldTableName;
+      const MessageBody = JSON.stringify(result);
+      const params = {
+        MessageBody,
+        QueueUrl
+      };
+      sqs.sendMessage(params, (err, data) => {
+        if (err) {
+          console.log('Error', err);
+          callback(err);
+        } else {
+          console.log('Success', data);
+          callback(null, `Successfully processed ${taskURL}: Put ${JSON.stringify(result)} to [${id}] to SQS`);
+        }
+      });
     } else {
-      params.TableName = PreSoldTableName;
+      const params = {
+        Item: result,
+        TableName: PreSoldTableName
+      };
+      ddb.put(params, (err, data) => {
+        if (err) {
+          console.log('Error', err);
+          callback(err);
+        } else {
+          console.log('Success', data);
+          callback(null, `Successfully processed ${taskURL}: Put ${JSON.stringify(result)} to [${id}]`);
+        }
+      });
     }
-
-    ddb.put(params, (err, data) => {
-      if (err) {
-        console.log('Error', err);
-        callback(err);
-      } else {
-        console.log('Success', data);
-        callback(null, `Successfully processed ${taskURL}: Put ${JSON.stringify(result)} to [${id}]`);
-      }
-    });
   }).catch((err) => {
     console.log(err);
     callback(err);
