@@ -1,5 +1,6 @@
 .DS_Store
 database_config*
+aws_config*
 aws-config*
 *.zip
 node_modules/
