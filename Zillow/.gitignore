@@ -1,4 +1,7 @@
 .DS_Store
-aws-config.json
+database_config*
+aws-config*
 *.zip
 node_modules/
+.idea/
+*.iml
