@@ -21,23 +21,24 @@ public class App
     {
         Injector injector = Guice.createInjector(new MainModule());
         SQSGateway sqsGateway = injector.getInstance(SQSGateway.class);
+        Properties properties = new Properties();
         try {
             File file = new File("./database_config");
             FileInputStream fileInput = new FileInputStream(file);
-            Properties properties = new Properties();
+
             properties.load(fileInput);
             fileInput.close();
         } catch (Exception e) {
             System.out.println("Unknown exception while loading config file: " + e);
+            return;
         }
 
         String queueURL = sqsGateway.getURL("PostSoldHousingData");
 
-//        String testString = "{\"id\":\"80117700_zpid\",\"latitude\":\"47616026\",\"longitude\":\"-122335701\",\"state\":\"Washington\",\"city\":\"Seattle\",\"zipcode\":\"98101\",\"neighborhood\":\"Denny Triangle\",\"address\":\"819 Virginia Street UNIT 2902\",\"price\":1018000,\"type\":\"Condo\",\"built\":2007,\"parking\":\"Attached Garage, 2 spaces\",\"beds\":2,\"baths\":1.5,\"sqft\":1316,\"remodel\":2007,\"stories\":0,\"lastupdatedate\":\"10/13/17\"}";
         Gson gson = new Gson();
 
         try {
-            HouseDataDAO houseDataDAO = new HouseDataDAO();
+            HouseDataDAO houseDataDAO = new HouseDataDAO(properties.getProperty("housedataUsername"), properties.getProperty("housedataPassword"));
             List<Message> messageList = sqsGateway.getMessage(queueURL);
             while(messageList != null && messageList.size() != 0){
                 for(Message message: messageList){

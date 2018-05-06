@@ -1,0 +1,6 @@
+/Users/zhuoshengjiang/Dev/Housify/HousifyCrawler/Zillow/ZillowDataWasher/src/main/java/com/housify/zillowdatawasher/module/MainModule.java
+/Users/zhuoshengjiang/Dev/Housify/HousifyCrawler/Zillow/ZillowDataWasher/src/main/java/com/housify/zillowdatawasher/DAO/HouseDataDAO.java
+/Users/zhuoshengjiang/Dev/Housify/HousifyCrawler/Zillow/ZillowDataWasher/src/main/java/com/housify/zillowdatawasher/module/SQSModule.java
+/Users/zhuoshengjiang/Dev/Housify/HousifyCrawler/Zillow/ZillowDataWasher/src/main/java/com/housify/zillowdatawasher/gateways/SQSGateway.java
+/Users/zhuoshengjiang/Dev/Housify/HousifyCrawler/Zillow/ZillowDataWasher/src/main/java/com/housify/zillowdatawasher/models/House.java
+/Users/zhuoshengjiang/Dev/Housify/HousifyCrawler/Zillow/ZillowDataWasher/src/main/java/com/housify/zillowdatawasher/App.java

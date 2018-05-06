@@ -1,0 +1,6 @@
+com/housify/zillowdatawasher/module/SQSModule.class
+com/housify/zillowdatawasher/module/MainModule.class
+com/housify/zillowdatawasher/DAO/HouseDataDAO.class
+com/housify/zillowdatawasher/models/House.class
+com/housify/zillowdatawasher/gateways/SQSGateway.class
+com/housify/zillowdatawasher/App.class
